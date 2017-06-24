@@ -18,7 +18,7 @@ We are always interested in contribution to the `Help` section Never too much do
 
 ## :cactus: More Resources
 
-See [kactus.io](https://kactus.io) for more product-oriented
+See [kactus.io](http://kactus.io) for more product-oriented
 information about Kactus.
 
 ## :cactus: License
