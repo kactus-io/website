@@ -146,3 +146,13 @@ footer {
 	opacity: 0.5;
 	padding-bottom: 40px;
 }
+
+footer svg {
+  position: relative;
+  top: 5px;
+}
+
+footer a {
+  text-decoration: none;
+  color: #24292e;
+}
