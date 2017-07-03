@@ -25,3 +25,13 @@
 .plan li {
   margin-bottom: 10px;
 }
+
+.question h3 {
+  font-size: 20px;
+  font-weight: 300;
+  margin-top: 50px;
+}
+
+.question a {
+  color: #24292e;
+}
