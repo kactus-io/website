@@ -14,7 +14,93 @@
 	<h1>Usage Data</h1>
 	<hr>
 	<div>
-    <h2>// TODO</h2>
+    <h2>Sample usage report</h2>
+    <div>
+      If you've opted in to submitting anonymized usage data in Kactus (can be disabled in preferences), data in the following form will be sent once per day:
+    </div>
+    <pre>{
+  "version":"0.1.0",
+  "osVersion":"macOS 10.12.3",
+  "platform":"darwin",
+  "mainReadyTime":23,
+  "loadTime":571,
+  "rendererReadyTime":311,
+  "commits":27,
+  "openShellCount":0,
+  "id":12,
+  "dotComAccount":true,
+  "enterpriseAccount":false,
+  "guid":"ea077284-724b-4f79-88a5-24c02d01ed55",
+  "repositoryCount":12,
+  "gitHubRepositoryCount":7
+}</pre>
+  </div>
+  <div>
+    <h2>Sample update request</h2>
+    <div>
+      Whenever GitHub Desktop checks for a new update, it will make a request to the update server of the following form:
+    </div>
+    <pre>GET https://kactus-autoupdater.herokuapp.com/update/darwin_macos/0.1.0 HTTP/1.1
+Host: kactus-autoupdater.herokuapp.com
+Accept: application/json
+Accept-Language: en-us
+Connection: keep-alive
+Accept-Encoding: gzip, deflate
+User-Agent: Kactus/0.1.0 CFNetwork/811.4.18 Darwin/16.5.0 (x86_64)</pre>
+  </div>
+  <div>
+    <h2>Sample error report</h2>
+    <div>
+      When GitHub Desktop encounters an unexpected error, it will attempt to submit a report of the following form:
+    </div>
+    <pre>POST https://api.kactus.io/v1/usage/exception HTTP/1.1
+Host: api.kactus.io
+Connection: keep-alive
+Content-Length: 1621
+Origin: null
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) GitHubDesktop-dev/0.5.1 Chrome/56.0.2924.87 Electron/1.6.7 Safari/537.36
+content-type: multipart/form-data; boundary=----WebKitFormBoundary46h60RIRVb3tz0ED
+Accept: */*
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US
+
+------WebKitFormBoundary46h60RIRVb3tz0ED
+Content-Disposition: form-data; name="name"
+
+Error
+------WebKitFormBoundary46h60RIRVb3tz0ED
+Content-Disposition: form-data; name="message"
+
+Boomtown!
+------WebKitFormBoundary46h60RIRVb3tz0ED
+Content-Disposition: form-data; name="stack"
+
+Error: Boomtown!
+    at click (eval at  (/User/mathieudutour/Projects/kactus/dist/Kactus-dev-darwin/resources/app/main.js:676:1), :203:23)
+    at MenuItem.click (/User/mathieudutour/Projects/kactus/dist/Kactus-dev-darwin/resources/electron.asar/browser/api/menu-item.js:52:9)
+    at EventEmitter.electron_1.ipcMain.on (eval at  (/User/mathieudutour/Projects/kactus/dist/Kactus-dev-darwin/resources/app/main.js:669:1), :110:22)
+    at emitTwo (events.js:106:13)
+    at EventEmitter.emit (events.js:191:7)
+    at WebContents. (/User/mathieudutour/Projects/kactus/dist/Kactus-dev-darwin/resources/electron.asar/browser/api/web-contents.js:247:37)
+    at emitTwo (events.js:106:13)
+    at WebContents.emit (events.js:191:7)
+------WebKitFormBoundary46h60RIRVb3tz0ED
+Content-Disposition: form-data; name="version"
+
+0.5.1
+------WebKitFormBoundary46h60RIRVb3tz0ED
+Content-Disposition: form-data; name="osVersion"
+
+Windows 10.0.14393
+------WebKitFormBoundary46h60RIRVb3tz0ED
+Content-Disposition: form-data; name="platform"
+
+win32
+------WebKitFormBoundary46h60RIRVb3tz0ED
+Content-Disposition: form-data; name="guid"
+
+bfa560c7-0bcf-4ac9-b5a8-5c5571945de0
+------WebKitFormBoundary46h60RIRVb3tz0ED--</pre>
   </div>
 </div>
 <hr />

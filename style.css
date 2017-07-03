@@ -159,3 +159,11 @@ footer a {
   text-decoration: none;
   color: #24292e;
 }
+
+pre {
+  text-align: left;
+  background: #24292e;
+  color: #FFF;
+  padding: 15px;
+  opacity: 0.5;
+}
