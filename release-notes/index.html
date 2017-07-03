@@ -46,7 +46,7 @@
 				prev += res.releases[k].reduce(function (s, n) {
 					var parts = n.split(']')
 					var tag = parts.shift().replace('[', '').trim().toLowerCase()
-					var note = parts.join(']').trim().replace(/#[0-9]+/, '<a href="https://github.com/kactus-io/kactus/issues/$&" class="link" target="_black">$&</a>"')
+					var note = parts.join(']').trim().replace(/#[0-9]+/, '<a href="https://github.com/kactus-io/kactus/issues/$&" class="link" target="_black">$&</a>')
 					s += '<li class="note">'
 					s +=   '<div class="badge" style="background: ' + (tagColor[tag] || '#3EAD3F') + '">' + tag + '</div>'
 					s +=   '<div class="description">' + note + '</div>'
