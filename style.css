@@ -37,7 +37,6 @@ header {
 	display: inline-block !important;
 	margin: 8px;
 	text-decoration: none;
-	color: #3EAD3F;
 }
 
 .nav a:hover {
@@ -166,4 +165,8 @@ pre {
   color: #FFF;
   padding: 15px;
   opacity: 0.5;
+}
+
+a {
+  color: #3EAD3F;
 }
