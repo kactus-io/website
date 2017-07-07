@@ -12,13 +12,8 @@
 		<li><a href="/help" class="current">Help</a></li>
 	</ul>
 </header>
-<div class="container text-center hero">
-	<h1>Documentation</h1>
-	<hr>
-	<div>
-    <h2>// TODO</h2>
-    <p><a href="/contact">Hit me</a> with what doesn't seem clear and I'll prioritize it!</p>
-  </div>
+<div class="container hero" id="container">
+	Loading...
 </div>
 <hr />
 <footer class="container">
@@ -40,4 +35,17 @@
   ga('create', 'UA-101929166-1', 'auto');
   ga('send', 'pageview');
 
+</script>
+<script src="https://unpkg.com/snarkdown@1.2.2/dist/snarkdown.umd.js"></script>
+<script>
+  var path = window.location.hash.slice(1)
+  fetch('https://api.github.com/repos/kactus-io/help/contents/' + (path || 'README') + '.md')
+		.then(function (res) { return res.json() })
+		.then(function (res) { return window.atob(res.content) })
+		.then(function (res) {
+      document.getElementById('container').innerHTML = snarkdown(res)
+    })
+    .catch((err) => {
+      window.location = 'http://kactus.io/404'
+    })
 </script>
