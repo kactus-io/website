@@ -14,4 +14,4 @@ install:
   - npm install
 
 script:
-  - ./node_modules/ugly-build/travis-deploy.js owner/repo
+  - ./node_modules/ugly-build/travis-deploy.js kactus-io/website
