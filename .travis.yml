@@ -1,0 +1,17 @@
+branches:
+  only:
+    - master
+
+language: node_js
+node_js:
+  - "8"
+
+cache:
+  directories:
+    - node_modules
+
+install:
+  - npm install
+
+script:
+  - ./node_modules/ugly-build/travis-deploy.js owner/repo
