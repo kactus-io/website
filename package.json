@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "ugly-build": ">=0.0.5"
+    "ugly-build": ">=0.0.8"
   }
 }
