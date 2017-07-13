@@ -165,6 +165,8 @@ pre {
   color: #FFF;
   padding: 15px;
   opacity: 0.5;
+  width: 100%;
+  overflow-x: auto;
 }
 
 a {
