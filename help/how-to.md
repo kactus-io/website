@@ -6,16 +6,16 @@ That's a good question. In a seemingly magical fashion, Kactus transforms your s
 
 ## Commit
 
-![commit](https://user-images.githubusercontent.com/3254314/28079034-2f0466fa-6667-11e7-8ef5-8a258e2d0466.gif)
+![commit](https://user-images.githubusercontent.com/3254314/28254880-df5a388e-6a65-11e7-8b73-8de6fe227927.gif)
 
 ---
 
 ## Merging two parallel branches
 
-![merge](https://user-images.githubusercontent.com/3254314/28079073-49ae3120-6667-11e7-83c3-0a979e7441ce.gif)
+![merge](https://user-images.githubusercontent.com/3254314/28254882-e28fb8d0-6a65-11e7-86a5-d766d4303959.gif)
 
 ---
 
 ## Sharing text styles across multiple sketch files
 
-![sharetextstyles](https://user-images.githubusercontent.com/3254314/28079114-69c1959c-6667-11e7-8e4e-c5db84f95626.gif)
+![sharetextstyle](https://user-images.githubusercontent.com/3254314/28254883-e5f79a92-6a65-11e7-86cc-3cfdc687a454.gif)
