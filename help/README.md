@@ -1,6 +1,6 @@
 # Documentation
 
-Kactus is built on top of the giant called [`git`](https://git-scm.com). That's why in order to use Kactus effienctly, we will need to learn some concepts used by `git`. While it is a very powerful technology and as such can be overwhelming at first, we just need a few key concepts to start with.
+Kactus is built on top of the giant called [`git`](https://git-scm.com). That's why in order to use Kactus efficiently, we will need to learn some concepts used by `git`. While it is a very powerful technology and as such can be overwhelming at first, we just need a few key concepts to start with.
 
 Here is a quick [glossary](/help/glossary) of specific terms that we use across the documentation.
 
