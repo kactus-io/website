@@ -10,9 +10,12 @@ cache:
   directories:
     - node_modules
 
+before_install:
+  - pip install --user awscli
+  - export PATH=$PATH:$HOME/.local/bin
+
 install:
   - npm install
-  - pip install awscli
 
 script:
   - node ./node_modules/ugly-build/index.js build
