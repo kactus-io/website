@@ -31,5 +31,6 @@ deploy:
     secret_access_key: $AWS_SECRET_ACCESS_KEY # Set in travis-ci.org dashboard
     bucket: $AWS_S3_BUCKED # Set in travis-ci.org dashboard
     local_dir: .build
+    region: eu-west-1
 after_deploy:
   - aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths "/*"
