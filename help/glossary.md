@@ -38,11 +38,17 @@ A diff is the _difference_ in changes between two commits, or saved changes. The
 
 Fetching refers to getting the latest changes from an online repository without merging them in. Once these changes are fetched you can compare them to your local branches (the files residing on your local machine).
 
-## Ignore (.gitignore)
+## Ignore
 
 Git will look for a special file in the root of your repo called `.gitignore` and ignore any files in the repo that match any of the patterns defined therein. You can read more about git ignore [here](https://git-scm.com/docs/gitignore).
 
-Tip: Because Finder hides files with names starting in a `.`, you may have to edit this file from a terminal.
+Finder hides files with names starting in a `.`, but you can easily edit this file within Kactus ("Repository" > "Repository Settings" > "Ignored Files").
+
+<figure style="text-align: center;">
+  <img style="width: auto;" src="https://user-images.githubusercontent.com/297461/30068977-6853030c-922d-11e7-94d0-01ef77276851.png" alt="Ignored Files">
+  <figcaption>Managing ignored files in Kactus</figcaption>
+</figure>
+
 
 ## Issue
 
