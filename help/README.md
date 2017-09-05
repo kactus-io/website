@@ -8,13 +8,9 @@ Here is a quick [glossary](/help/glossary) of specific terms that we use across 
 
 ## How does it work?
 
-That's a good question. In a seemigly fashion, Kactus transform your sketch files into separate text files. One for each layer. This allow `git` to track them, merge them, compare them.
+That's a good question. In a seemigly magical fashion, Kactus transforms your sketch files into separate text files. One for each layer. This allows `git` to track them, merge them, compare them.
 
----
-
-## How to?
-
-More information [here](/help/how-to).
+Read more about [how to work with Kactus](/help/how-to).
 
 ---
 
