@@ -3,7 +3,7 @@
     "build": "ugly-build build"
   },
   "dependencies": {
-    "ugly-build": "^0.1.0"
+    "ugly-build": "^0.1.1"
   },
   "name": "kactus-www",
   "description": "Kactus.io source",
