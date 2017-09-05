@@ -1,5 +1,25 @@
 {
+  "scripts": {
+    "build": "ugly-build build"
+  },
   "dependencies": {
     "ugly-build": "^0.1.0"
-  }
+  },
+  "name": "kactus-www",
+  "description": "Kactus.io source",
+  "version": "0.2.6",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kactus-io/website.git"
+  },
+  "author": {
+    "name": "Mathieu Dutour",
+    "email": "mathieu@dutour.me",
+    "url": "http://mathieu.dutour.me"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kactus-io/website/issues"
+  },
+  "homepage": "https://github.com/kactus-io/website"
 }
