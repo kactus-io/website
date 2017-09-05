@@ -38,6 +38,12 @@ A diff is the _difference_ in changes between two commits, or saved changes. The
 
 Fetching refers to getting the latest changes from an online repository without merging them in. Once these changes are fetched you can compare them to your local branches (the files residing on your local machine).
 
+## Ignore (.gitignore)
+
+Git will look for a special file in the root of your repo called `.gitignore` and ignore any files in the repo that match any of the patterns defined therein. You can read more about git ignore [here](https://git-scm.com/docs/gitignore).
+
+Tip: Because Finder hides files with names starting in a `.`, you may have to edit this file from a terminal.
+
 ## Issue
 
 Issues are suggested improvements, tasks or questions related to the repository. Issues can be created by anyone (for public repositories), and are moderated by repository collaborators. Each issue contains its own discussion forum, can be labeled and assigned to a user.
