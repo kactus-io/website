@@ -36,7 +36,7 @@
   <div>
     <h2>Sample update request</h2>
     <div>
-      Whenever GitHub Desktop checks for a new update, it will make a request to the update server of the following form:
+      Whenever Kactus checks for a new update, it will make a request to the update server of the following form:
     </div>
     <pre>GET https://kactus-autoupdater.herokuapp.com/update/darwin_macos/0.1.0 HTTP/1.1
 Host: kactus-autoupdater.herokuapp.com
@@ -49,7 +49,7 @@ User-Agent: Kactus/0.1.0 CFNetwork/811.4.18 Darwin/16.5.0 (x86_64)</pre>
   <div>
     <h2>Sample error report</h2>
     <div>
-      When GitHub Desktop encounters an unexpected error, it will attempt to submit a report of the following form:
+      When Kactus encounters an unexpected error, it will attempt to submit a report of the following form:
     </div>
     <pre>POST https://api.kactus.io/v1/usage/exception HTTP/1.1
 Host: api.kactus.io
