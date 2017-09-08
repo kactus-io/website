@@ -51,8 +51,11 @@ If your sketch files are already tracked in a git repository, there are few thin
 
 1. Open your repo in Kactus to generate the JSON representation of your sketch files
 2. Commit the generated JSON directories
-2. Untrack sketch files. In most cases, this can be done with git by running: `git rm --cached *.sketch`
-3. Tell git to [ignore](/help/glossary/#ignore) sketch files by adding `*.sketch` to your repo's `.gitignore` file (create it if it doesn't exist)
+3. Untrack sketch files
+    - In most cases, this can be done with git by running: `git rm --cached *.sketch`
+4. Tell git to [ignore](/help/glossary/#ignore) sketch files by adding `*.sketch` to your repo's `.gitignore` file
+    - This can be done from within Kactus ("Repository" > "Repository Settings" > "Ignored Files")
+5. **IMPORTANT:** Add (or modify) your repository's `.gitattributes` file to include `* text=auto`. This helps git determine when files actually differ by normalizing line endings ([more details](https://git-scm.com/docs/gitattributes#_end_of_line_conversion))
 
 > *Note:* When you create a new repository with Kactus, it is automatically configured to [ignore](/help/glossary/#ignore) sketch files.
 
