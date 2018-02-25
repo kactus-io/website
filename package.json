@@ -1,8 +1,10 @@
 {
   "scripts": {
-    "build": "ugly-build build"
+    "build": "ugly-build build",
+    "serve": "serve .build"
   },
-  "dependencies": {
+  "devDependencies": {
+    "serve": "^6.4.11",
     "ugly-build": "^0.1.1"
   },
   "name": "kactus-www",

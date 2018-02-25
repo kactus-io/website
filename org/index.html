@@ -1,0 +1,377 @@
+<title>Kactus - Oganization</title>
+<link href="./org.css" rel="stylesheet" type="text/css">
+<link href="../pricing/pricing.css" rel="stylesheet" type="text/css">
+<div id="error-banner" style="display: none"><div id="error-content">There was an error...</div><div id="close-banner">x</div></div>
+<header class="container text-center">
+	<a href="/"><img src="https://avatars0.githubusercontent.com/u/22014617?v=3&u=89e1d1c468b5abb12e2c8a1233bb08f3d3222db9&s=96" alt="Kactus" width="96px" height="96px"/></a>
+	<ul class="nav">
+		<li><a href="/">Overview</a></li>
+    <li><a href="/pricing/">Pricing</a></li>
+		<li><a href="/release-notes/">Release Notes</a></li>
+		<li><a href="/help/">Help</a></li>
+	</ul>
+</header>
+
+<div class="container hero" id="container">
+  <div id="signup" style="display: none">
+    <p>An organization allows you to centralize the licenses for the designers in your team.</p>
+    <a class="cta primary" href="https://github.com/login/oauth/authorize?client_id=524a1e784f4f1885027f">Signup with Github</a>
+  </div>
+  <div id="loading">
+    <div class="spinner">
+      <div class="double-bounce1"></div>
+      <div class="double-bounce2"></div>
+    </div>
+  </div>
+  <div id="choose-org" style="display: none">
+    <em>You are part of multiple organizations. That is not yet supported. Please contact me: mathieu@kactus.io.</em>
+  </div>
+  <div id="create-org" style="display: none">
+    <p><em>You do not have any organization yet.</em></p>
+    <p>An organization allows you to centralize the licenses for the designers in your team.</p>
+    <div class="features">
+        <div class="plan" id="premium">
+          <h2>Premium</h2>
+          <h3>$4.99</h3>
+          <h4>per user per month</h4>
+          <ul>
+            <li>Unlimited public repositories</li>
+            <li>No locked-in commitment: you can always generate the sketch files to switch back</li>
+            <li><strong>Unlimited private repositories</strong></li>
+          </ul>
+        </div>
+        <div class="plan selected" id="enterprise">
+          <h2>Enterprise</h2>
+          <h3>$11.99</h3>
+          <h4>per user per month</h4>
+          <ul>
+            <li>Unlimited public repositories</li>
+            <li>No locked-in commitment: you can always generate the sketch files to switch back</li>
+            <li><strong>Unlimited private repositories</strong></li>
+            <li><strong>Support single sign-on and on-premises deployment</strong></li>
+            <li><strong>Support any git server (BitBucket, Gitlab, self-hosted, etc.)</strong></li>
+          </ul>
+        </div>
+      </div>
+    <button class="cta primary" id="onCreateOrg">Create an organization</button>
+  </div>
+  <div id="manage-org" style="display: none">
+    <h1>Manage your organization</h1>
+    <div id="locked-org">
+      <p>Looks like the subscription is not valid anymore.</p>
+      <button class="cta primary" id="onUnlockOrg">Renew subscription</button>
+    </div>
+    <div id="unlocked-org">
+      <fieldset>
+        <label for="github-username">Add a member to your organization</label>
+        <input type="text" id="github-username" placeholder="GitHub username">
+        <button class="cta" id="onAddMember">Add to organization</button>
+    </div>
+    <table>
+      <tbody id="org-member"></tbody>
+    </table>
+  </div>
+</div>
+
+<script src="https://checkout.stripe.com/checkout.js"></script>
+
+<script>
+  var query = location.search ? location.search.slice(1).split('&').reduce(function(prev, x) {
+    var parts = x.split('=')
+    prev[parts[0]] = decodeURIComponent(parts[1])
+    return prev
+  }, {}) : {}
+
+  var enterprise = true
+
+  function isAdmin(user, org) {
+    return org.admins.indexOf(user.githubId) !== -1
+  }
+
+  document.getElementById('close-banner').addEventListener('click', function(event) {
+    document.getElementById('error-banner').style.display = 'none'
+  })
+
+  document.getElementById('premium').addEventListener('click', function(event) {
+    enterprise = false
+    document.getElementById('premium').className = 'plan selected'
+    document.getElementById('enterprise').className = 'plan'
+  })
+
+  document.getElementById('enterprise').addEventListener('click', function(event) {
+    enterprise = true
+    document.getElementById('premium').className = 'plan'
+    document.getElementById('enterprise').className = 'plan selected'
+  })
+
+  function showError(err) {
+    console.log(err)
+    document.getElementById('error-content').innerHTML = err
+    document.getElementById('error-banner').style.display = 'block'
+  }
+
+  document.addEventListener('click', function (e) {
+    var target = e.target
+    if (!e.target || e.target.className !== 'remove-member cta') {
+      return
+    }
+    e.preventDefault()
+    document.getElementById('manage-org').style.display = 'none'
+    document.getElementById('loading').style.display = 'block'
+    var body = {
+      memberId: target.dataset.id,
+      githubId: JSON.parse(localStorage.user).githubId,
+      githubToken: localStorage.token,
+      orgId: window.currentOrg.id
+    }
+    fetch('https://api.kactus.io/dev/orgs/member', {
+      body: JSON.stringify(body),
+      mode: 'cors',
+      method: 'DELETE'
+    }).then(function (res) {
+      if (res.status !== 200) {
+        return res.json().then(function (parsed) {
+          throw new Error(parsed)
+        })
+      }
+      return res.json()
+    })
+    .then(function (res) {
+      var user = JSON.parse(localStorage.user)
+      user.orgs = (user.orgs || []).map(function (org) {
+        if (org.id === window.currentOrg.id) {
+          org.members = (org.members || []).filter(function (memberId) {
+            return memberId !== target.dataset.id
+          })
+          return org
+        }
+        return org
+      })
+      localStorage.user = JSON.stringify(user)
+      render()
+    })
+    .catch(function (err) {
+      console.log(err)
+      showError(err.message)
+      render()
+    })
+  })
+
+  function handleSignup() {
+    document.getElementById('signup').style.display = 'none'
+    document.getElementById('loading').style.display = 'block'
+    fetch('https://api.kactus.io/dev/oauth/github/authenticate?code=' + query.code + '&state=' + query.state)
+    .then(function (res) {
+      if (res.status !== 200) {
+        return res.json().then(function (parsed) {
+          throw new Error(parsed)
+        })
+      }
+      return res.json()
+    })
+    .then(function (res) {
+      localStorage.user = JSON.stringify(res.user)
+      localStorage.token = res.token
+      render()
+    })
+    .catch(function (err) {
+      console.log(err)
+      render()
+      showError(err.message)
+    })
+  }
+
+  function renderCreateOrg() {
+    document.getElementById('create-org').style.display = 'block'
+  }
+
+  function renderChooseOrg() {
+    document.getElementById('choose-org').style.display = 'block'
+  }
+
+  function renderManageOrg(user) {
+    document.getElementById('manage-org').style.display = 'block'
+    var org = window.currentOrg
+
+    if (!org.valid && !org.validEnterprise || !org.stripeId) {
+      document.getElementById('unlocked-org').style.display = 'none'
+    } else {
+      document.getElementById('locked-org').style.display = 'none'
+
+      document.getElementById('org-member').innerHTML = org.members.reduce(function (prev, memberId) {
+        return prev + '<tr id="member-' + memberId + '"><td><div class="avatar"></div><td><td>Loading...</td><td></td></tr>'
+      }, '')
+
+      org.members.forEach(function (memberId) {
+        fetch('https://api.github.com/user/' + memberId, {
+          headers: {
+            Authorization: 'Token ' + localStorage.token,
+            Accept: 'application/vnd.github.v3+json'
+          }
+        }).then(function (res) {
+          if (res.status !== 200) {
+            return res.json().then(function (parsed) {
+              throw new Error(parsed)
+            })
+          }
+          return res.json()
+        })
+        .then(function (res) {
+          document.getElementById('member-' + memberId).innerHTML = '<td><div class="avatar"><img src="' + res.avatar_url + '" /></div></td><td>' + res.login + '</td><td>' + (isAdmin(user, org) && user.githubId !== memberId ? '<button class="remove-member cta" data-id="' + memberId + '">Remove</button>' : '') + '</td>'
+        })
+        .catch(function (err) {
+          console.log(err)
+          showError(err.message)
+        })
+      })
+    }
+  }
+
+  function render() {
+    document.getElementById('loading').style.display = 'none'
+    if (localStorage.user && localStorage.token) {
+      var user = JSON.parse(localStorage.user)
+      document.getElementById('signup').style.display = 'none'
+      if (user.orgs && user.orgs.length) {
+        var orgs = user.orgs
+
+        var org
+        if (query.org) {
+          org = orgs.find(function (o) {
+            return o.id === query.org
+          })
+        } else {
+          var adminOrgs = orgs.filter(isAdmin.bind(this, user))
+          if (adminOrgs.length === 1) {
+            org = adminOrgs[0]
+          } else if (orgs.length === 1) {
+            org = orgs[0]
+          }
+        }
+
+        if (org) {
+          window.currentOrg = org
+          renderManageOrg(user)
+        } else {
+          renderChooseOrg(user)
+        }
+      } else {
+        renderCreateOrg(user)
+      }
+    } else if (query.code) {
+      handleSignup()
+    } else {
+      document.getElementById('signup').style.display = 'block'
+    }
+  }
+
+  render()
+
+  var stripeHandler = StripeCheckout.configure({
+    key: 'pk_live_qC4jgieXD6Qz8os77SPor33h',
+    locale: 'auto',
+    name: 'Kactus',
+    zipCode: true,
+    panelLabel: 'Create',
+    token: function(token) {
+      document.getElementById('create-org').style.display = 'none'
+      document.getElementById('loading').style.display = 'block'
+      var body = {
+        token: token.id,
+        email: token.email,
+        githubId: JSON.parse(localStorage.user).githubId,
+        githubToken: localStorage.token,
+        enterprise: enterprise,
+      }
+      if (window.currentOrg) {
+        body.orgId = window.currentOrg.id
+      }
+      fetch('https://api.kactus.io/dev/orgs/unlock', {
+        body: JSON.stringify(body),
+        mode: 'cors',
+        method: 'POST'
+      }).then(function (res) {
+        if (res.status !== 200) {
+          return res.json().then(function (parsed) {
+            throw new Error(parsed)
+          })
+        }
+        return res.json()
+      })
+      .then(function (res) {
+        var user = JSON.parse(localStorage.user)
+        if (window.currentOrg) {
+          user.orgs = (user.orgs || []).map(function (org) {
+            if (org.id === res.org.id) {
+              return res.org
+            }
+            return org
+          })
+        } else {
+          user.orgs = (user.orgs || []).concat(res.org)
+        }
+        localStorage.user = JSON.stringify(user)
+        render()
+      })
+      .catch(function (err) {
+        console.log(err)
+        render()
+        showError(err.message)
+      })
+    }
+  });
+
+  function openStripeHandler(e) {
+    stripeHandler.open()
+    e.preventDefault()
+  }
+
+  document.getElementById('onCreateOrg').addEventListener('click', openStripeHandler)
+  document.getElementById('onUnlockOrg').addEventListener('click', openStripeHandler)
+
+  // Close Checkout on page navigation:
+  window.addEventListener('popstate', function() {
+    stripeHandler.close()
+  })
+
+  document.getElementById('onAddMember').addEventListener('click', function (e) {
+    e.preventDefault()
+    document.getElementById('manage-org').style.display = 'none'
+    document.getElementById('loading').style.display = 'block'
+    var body = {
+      memberUsername: document.getElementById('github-username').value,
+      githubId: JSON.parse(localStorage.user).githubId,
+      githubToken: localStorage.token,
+      orgId: window.currentOrg.id
+    }
+    fetch('https://api.kactus.io/dev/orgs/member', {
+      body: JSON.stringify(body),
+      mode: 'cors',
+      method: 'POST'
+    }).then(function (res) {
+      if (res.status !== 200) {
+        return res.json().then(function (parsed) {
+          throw new Error(parsed)
+        })
+      }
+      return res.json()
+    })
+    .then(function (res) {
+      var user = JSON.parse(localStorage.user)
+      user.orgs = (user.orgs || []).map(function (org) {
+        if (org.id === window.currentOrg.id) {
+          org.members = (org.members || []).concat(res.memberId)
+          return org
+        }
+        return org
+      })
+      localStorage.user = JSON.stringify(user)
+      render()
+    })
+    .catch(function (err) {
+      console.log(err)
+      render()
+      showError(err.message)
+    })
+  })
+</script>
