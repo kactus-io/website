@@ -124,7 +124,7 @@
       githubToken: localStorage.token,
       orgId: window.currentOrg.id
     }
-    fetch('https://api.kactus.io/dev/orgs/member', {
+    fetch('https://api.kactus.io/v1/orgs/member', {
       body: JSON.stringify(body),
       mode: 'cors',
       method: 'DELETE'
@@ -160,7 +160,7 @@
   function handleSignup() {
     document.getElementById('signup').style.display = 'none'
     document.getElementById('loading').style.display = 'block'
-    fetch('https://api.kactus.io/dev/oauth/github/authenticate?code=' + query.code + '&state=' + query.state)
+    fetch('https://api.kactus.io/v1/oauth/github/authenticate?code=' + query.code + '&state=' + query.state)
     .then(function (res) {
       if (res.status !== 200) {
         return res.json().then(function (parsed) {
@@ -286,7 +286,7 @@
       if (window.currentOrg) {
         body.orgId = window.currentOrg.id
       }
-      fetch('https://api.kactus.io/dev/orgs/unlock', {
+      fetch('https://api.kactus.io/v1/orgs/unlock', {
         body: JSON.stringify(body),
         mode: 'cors',
         method: 'POST'
@@ -344,7 +344,7 @@
       githubToken: localStorage.token,
       orgId: window.currentOrg.id
     }
-    fetch('https://api.kactus.io/dev/orgs/member', {
+    fetch('https://api.kactus.io/v1/orgs/member', {
       body: JSON.stringify(body),
       mode: 'cors',
       method: 'POST'
