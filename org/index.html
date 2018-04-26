@@ -273,16 +273,17 @@
     name: 'Kactus',
     zipCode: true,
     panelLabel: 'Create',
-    token: function(token) {
+    billingAddress: true,
+    token: function(token, args) {
       document.getElementById('create-org').style.display = 'none'
       document.getElementById('loading').style.display = 'block'
-      var body = {
+      var body = Object.assign(args || {}, {
         token: token.id,
         email: token.email,
         githubId: JSON.parse(localStorage.user).githubId,
         githubToken: localStorage.token,
         enterprise: enterprise,
-      }
+      })
       if (window.currentOrg) {
         body.orgId = window.currentOrg.id
       }
