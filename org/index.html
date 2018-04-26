@@ -277,13 +277,14 @@
     token: function(token, args) {
       document.getElementById('create-org').style.display = 'none'
       document.getElementById('loading').style.display = 'block'
-      var body = Object.assign(args || {}, {
+      var body = {
         token: token.id,
         email: token.email,
         githubId: JSON.parse(localStorage.user).githubId,
         githubToken: localStorage.token,
         enterprise: enterprise,
-      })
+        metadata: args
+      }
       if (window.currentOrg) {
         body.orgId = window.currentOrg.id
       }
