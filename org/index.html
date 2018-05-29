@@ -15,7 +15,9 @@
 <div class="container hero" id="container">
   <div id="signup" style="display: none">
     <p>An organization allows you to centralize the licenses for the designers in your team.</p>
+    <p>Both you and the people in your team need to be Kactus users before creating an organization.</p>
     <a class="cta primary" href="https://github.com/login/oauth/authorize?client_id=524a1e784f4f1885027f">Signup with Github</a>
+    <a class="cta" id="download-url" href="https://github.com/kactus-io/kactus/releases/latest">Download Kactus for macOS</a>
   </div>
   <div id="loading">
     <div class="spinner">
@@ -30,29 +32,41 @@
     <p><em>You do not have any organization yet.</em></p>
     <p>An organization allows you to centralize the licenses for the designers in your team.</p>
     <div class="features">
-        <div class="plan" id="premium">
-          <h2>Premium</h2>
-          <h3>$4.99</h3>
-          <h4>per user per month</h4>
-          <ul>
-            <li>Unlimited public repositories</li>
-            <li>No locked-in commitment: you can always generate the sketch files to switch back</li>
-            <li><strong>Unlimited private repositories</strong></li>
-          </ul>
-        </div>
-        <div class="plan selected" id="enterprise">
-          <h2>Enterprise</h2>
-          <h3>$11.99</h3>
-          <h4>per user per month</h4>
-          <ul>
-            <li>Unlimited public repositories</li>
-            <li>No locked-in commitment: you can always generate the sketch files to switch back</li>
-            <li><strong>Unlimited private repositories</strong></li>
-            <li><strong>Support single sign-on and on-premises deployment</strong></li>
-            <li><strong>Support any git server (BitBucket, Gitlab, self-hosted, etc.)</strong></li>
-          </ul>
-        </div>
+      <div class="plan" id="premium">
+        <h2>Premium</h2>
+        <h3>$4.99</h3>
+        <h4>per user per month</h4>
+        <ul>
+          <li>Unlimited public repositories</li>
+          <li>No locked-in commitment: you can always generate the sketch files to switch back</li>
+          <li><strong>Unlimited private repositories</strong></li>
+        </ul>
       </div>
+      <div class="plan selected" id="enterprise">
+        <h2>Enterprise</h2>
+        <h3>$11.99</h3>
+        <h4>per user per month</h4>
+        <ul>
+          <li>Unlimited public repositories</li>
+          <li>No locked-in commitment: you can always generate the sketch files to switch back</li>
+          <li><strong>Unlimited private repositories</strong></li>
+          <li><strong>Support single sign-on and on-premises deployment</strong></li>
+          <li><strong>Support any git server (BitBucket, Gitlab, self-hosted, etc.)</strong></li>
+        </ul>
+      </div>
+    </div>
+    <div class="billing-duration-wrapper">
+      <p>
+        <label for="monthly-billing">
+          <input type="radio" value="month" id="monthly-billing" name="duration-billing" checked /> Monthly billing <span id="monthly-billing-quote" class="billing-quote">$11.99 / month</span>
+        </label>
+      </p>
+      <p>
+        <label for="yearly-billing">
+          <input type="radio" value="year" name="duration-billing" id="yearly-billing" /> Yearly billing <span id="yearly-billing-quote" class="billing-quote">$119.90 / year (2 months free)</span>
+        </label>
+      </p>
+    </div>
     <button class="cta primary" id="onCreateOrg">Create an organization</button>
   </div>
   <div id="manage-org" style="display: none">
@@ -83,6 +97,7 @@
   }, {}) : {}
 
   var enterprise = true
+  var duration = 'month'
 
   function isAdmin(user, org) {
     return org.admins.indexOf(user.githubId) !== -1
@@ -96,12 +111,23 @@
     enterprise = false
     document.getElementById('premium').className = 'plan selected'
     document.getElementById('enterprise').className = 'plan'
+    document.getElementById('monthly-billing-quote').innerText = '$4.99 / month'
+    document.getElementById('yearly-billing-quote').innerText = '$49.90 / month (2 months free)'
   })
 
   document.getElementById('enterprise').addEventListener('click', function(event) {
     enterprise = true
     document.getElementById('premium').className = 'plan'
     document.getElementById('enterprise').className = 'plan selected'
+    document.getElementById('monthly-billing-quote').innerText = '$11.99 / month'
+    document.getElementById('yearly-billing-quote').innerText = '$119.90 / month (2 months free)'
+  })
+
+  document.addEventListener('change', function(event) {
+    if (!event.target || event.target.name !== 'duration-billing') {
+      return
+    }
+    duration = event.target.value
   })
 
   function showError(err) {
@@ -283,6 +309,7 @@
         githubId: JSON.parse(localStorage.user).githubId,
         githubToken: localStorage.token,
         enterprise: enterprise,
+        duration: duration,
         metadata: args
       }
       if (window.currentOrg) {
@@ -329,7 +356,11 @@
   }
 
   document.getElementById('onCreateOrg').addEventListener('click', openStripeHandler)
-  document.getElementById('onUnlockOrg').addEventListener('click', openStripeHandler)
+
+  document.getElementById('onUnlockOrg').addEventListener('click', function (e) {
+    document.getElementById('onCreateOrg').innerText = 'Subscribe'
+    renderCreateOrg(e)
+  })
 
   // Close Checkout on page navigation:
   window.addEventListener('popstate', function() {
@@ -377,3 +408,4 @@
     })
   })
 </script>
+<script src="../getLatestDownloadURL.js" async></script>

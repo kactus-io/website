@@ -121,3 +121,15 @@ td .cta:hover {
     transform: scale(1.0);
   }
 }
+
+.billing-duration-wrapper label {
+  display: inline-block;
+  width: 350px;
+  max-width: 90%;
+  text-align: left;
+}
+
+.billing-quote {
+  font-size: 0.9rem;
+  padding-left: 15px;
+}
