@@ -1,4 +1,4 @@
-#error-banner {
+#error-banner, #success-banner {
   position: absolute;
   top: 15px;
   right: 15px;
@@ -10,7 +10,21 @@
   width: 250px;
 }
 
-#close-banner {
+#error-banner {
+  background: rgb(155, 13, 13);
+}
+
+#success-banner {
+  background: #3EAD3F;
+}
+
+#onUpdateCardDetails {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+#close-success-banner, #close-error-banner {
   position: absolute;
   top: 0;
   right: 0;

@@ -1,7 +1,8 @@
 <title>Kactus - Oganization</title>
 <link href="./org.css" rel="stylesheet" type="text/css">
 <link href="../pricing/pricing.css" rel="stylesheet" type="text/css">
-<div id="error-banner" style="display: none"><div id="error-content">There was an error...</div><div id="close-banner">x</div></div>
+<div id="error-banner" style="display: none"><div id="error-content">There was an error...</div><div id="close-error-banner">x</div></div>
+<div id="success-banner" style="display: none"><div id="success-content">Success!</div><div id="close-success-banner">x</div></div>
 <header class="container text-center">
 	<a href="/"><img src="https://avatars0.githubusercontent.com/u/22014617?v=3&u=89e1d1c468b5abb12e2c8a1233bb08f3d3222db9&s=96" alt="Kactus" width="96px" height="96px"/></a>
 	<ul class="nav">
@@ -69,17 +70,19 @@
     </div>
     <button class="cta primary" id="onCreateOrg">Create an organization</button>
   </div>
-  <div id="manage-org" style="display: none">
+  <div id="manage-org" style="display: block; position: relative">
     <h1>Manage your organization</h1>
     <div id="locked-org">
       <p>Looks like the subscription is not valid anymore.</p>
       <button class="cta primary" id="onUnlockOrg">Renew subscription</button>
     </div>
     <div id="unlocked-org">
+      <button class="cta" id="onUpdateCardDetails">Update Card details</button>
       <fieldset>
         <label for="github-username">Add a member to your organization</label>
         <input type="text" id="github-username" placeholder="GitHub username">
         <button class="cta" id="onAddMember">Add to organization</button>
+      </fieldset>
     </div>
     <table>
       <tbody id="org-member"></tbody>
@@ -103,8 +106,11 @@
     return org.admins.indexOf(user.githubId) !== -1
   }
 
-  document.getElementById('close-banner').addEventListener('click', function(event) {
+  document.getElementById('close-error-banner').addEventListener('click', function(event) {
     document.getElementById('error-banner').style.display = 'none'
+  })
+  document.getElementById('close-success-banner').addEventListener('click', function(event) {
+    document.getElementById('success-banner').style.display = 'none'
   })
 
   document.getElementById('premium').addEventListener('click', function(event) {
@@ -130,9 +136,14 @@
     duration = event.target.value
   })
 
+  function showSuccess(message) {
+    document.getElementById('success-content').innerHTML = message
+    document.getElementById('success-banner').style.display = 'block'
+  }
+
   function showError(err) {
     console.log(err)
-    document.getElementById('error-content').innerHTML = err
+    document.getElementById('error-content').innerHTML = err.message || JSON.stringify(err)
     document.getElementById('error-banner').style.display = 'block'
   }
 
@@ -177,8 +188,7 @@
       render()
     })
     .catch(function (err) {
-      console.log(err)
-      showError(err.message)
+      showError(err)
       render()
     })
   })
@@ -201,9 +211,8 @@
       render()
     })
     .catch(function (err) {
-      console.log(err)
       render()
-      showError(err.message)
+      showError(err)
     })
   }
 
@@ -246,8 +255,7 @@
           document.getElementById('member-' + memberId).innerHTML = '<td><div class="avatar"><img src="' + res.avatar_url + '" /></div></td><td>' + res.login + '</td><td>' + (isAdmin(user, org) && user.githubId !== memberId ? '<button class="remove-member cta" data-id="' + memberId + '">Remove</button>' : '') + '</td>'
         })
         .catch(function (err) {
-          console.log(err)
-          showError(err.message)
+          showError(err)
         })
       })
     }
@@ -301,6 +309,7 @@
     panelLabel: 'Create',
     billingAddress: true,
     token: function(token, args) {
+      document.getElementById('manage-org').style.display = 'none'
       document.getElementById('create-org').style.display = 'none'
       document.getElementById('loading').style.display = 'block'
       var body = {
@@ -314,6 +323,29 @@
       }
       if (window.currentOrg) {
         body.orgId = window.currentOrg.id
+      }
+      if (window.stripeLabel === 'Update Card Details') {
+        fetch('https://api.kactus.io/v1/orgs/update-card-details', {
+          body: JSON.stringify(body),
+          mode: 'cors',
+          method: 'PUT'
+        }).then(function (res) {
+          if (res.status !== 200) {
+            return res.json().then(function (parsed) {
+              throw new Error(parsed)
+            })
+          }
+          return res.json()
+        })
+        .then(function (res) {
+          render()
+          showSuccess('Card details updated!')
+        })
+        .catch(function (err) {
+          render()
+          showError(err)
+        })
+        return
       }
       fetch('https://api.kactus.io/v1/orgs/unlock', {
         body: JSON.stringify(body),
@@ -343,19 +375,23 @@
         render()
       })
       .catch(function (err) {
-        console.log(err)
         render()
-        showError(err.message)
+        showError(err)
       })
     }
   });
 
-  function openStripeHandler(e) {
-    stripeHandler.open()
-    e.preventDefault()
+  function openStripeHandler(label) {
+    return function(e) {
+      window.stripeLabel = label
+      stripeHandler.open({
+        panelLabel: label
+      })
+      e.preventDefault()
+    }
   }
 
-  document.getElementById('onCreateOrg').addEventListener('click', openStripeHandler)
+  document.getElementById('onCreateOrg').addEventListener('click', openStripeHandler('Create'))
 
   document.getElementById('onUnlockOrg').addEventListener('click', function (e) {
     document.getElementById('onCreateOrg').innerText = 'Subscribe'
@@ -402,10 +438,13 @@
       render()
     })
     .catch(function (err) {
-      console.log(err)
       render()
-      showError(err.message)
+      showError(err)
     })
   })
+
+  document.getElementById('onUpdateCardDetails').addEventListener('click',
+    openStripeHandler('Update Card Details')
+  )
 </script>
 <script src="../getLatestDownloadURL.js" async></script>
