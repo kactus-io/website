@@ -14,6 +14,7 @@
 </header>
 
 <div class="container hero" id="container">
+  <button class="cta primary logout" id="onLogout" style="display: none">Logout</button>
   <div id="signup" style="display: none">
     <p>An organization allows you to centralize the licenses for the designers in your team.</p>
     <p>Both you and the people in your team need to be Kactus users before creating an organization.</p>
@@ -30,8 +31,10 @@
     <em>You are part of multiple organizations. That is not yet supported. Please contact me: mathieu@kactus.io.</em>
   </div>
   <div id="create-org" style="display: none">
-    <p><em>You do not have any organization yet.</em></p>
-    <p>An organization allows you to centralize the licenses for the designers in your team.</p>
+    <div id="create-org-intro">
+      <p><em>You do not have any organization yet.</em></p>
+      <p>An organization allows you to centralize the licenses for the designers in your team.</p>
+    </div>
     <div class="features">
       <div class="plan" id="premium">
         <h2>Premium</h2>
@@ -136,6 +139,11 @@
     duration = event.target.value
   })
 
+  document.getElementById('onLogout').addEventListener('click', function(event) {
+    localStorage.clear()
+    window.location.reload()
+  })
+
   function showSuccess(message) {
     document.getElementById('success-content').innerHTML = message
     document.getElementById('success-banner').style.display = 'block'
@@ -216,8 +224,13 @@
     })
   }
 
-  function renderCreateOrg() {
+  function renderCreateOrg(withIntro) {
     document.getElementById('create-org').style.display = 'block'
+    if (withIntro !== false) {
+      document.getElementById('create-org-intro').style.display = 'block'
+    } else {
+      document.getElementById('create-org-intro').style.display = 'none'
+    }
   }
 
   function renderChooseOrg() {
@@ -266,6 +279,7 @@
     if (localStorage.user && localStorage.token) {
       var user = JSON.parse(localStorage.user)
       document.getElementById('signup').style.display = 'none'
+      document.getElementById('onLogout').style.display = 'block'
       if (user.orgs && user.orgs.length) {
         var orgs = user.orgs
 
@@ -290,11 +304,12 @@
           renderChooseOrg(user)
         }
       } else {
-        renderCreateOrg(user)
+        renderCreateOrg()
       }
     } else if (query.code) {
       handleSignup()
     } else {
+      document.getElementById('onLogout').style.display = 'hidden'
       document.getElementById('signup').style.display = 'block'
     }
   }
@@ -394,11 +409,13 @@
     }
   }
 
-  document.getElementById('onCreateOrg').addEventListener('click', openStripeHandler('Create'))
+  document.getElementById('onCreateOrg').addEventListener('click', function(e) {
+    return openStripeHandler(document.getElementById('onCreateOrg').innerText)(e)
+  })
 
   document.getElementById('onUnlockOrg').addEventListener('click', function (e) {
     document.getElementById('onCreateOrg').innerText = 'Subscribe'
-    renderCreateOrg(e)
+    renderCreateOrg(false)
   })
 
   // Close Checkout on page navigation:

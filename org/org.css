@@ -147,3 +147,9 @@ td .cta:hover {
   font-size: 0.9rem;
   padding-left: 15px;
 }
+
+.logout {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
