@@ -1,6 +1,6 @@
 # How does it work?
 
-That's a good question. Instead of tracking the *actual* sketch files (or *binaries*) in git, Kactus transforms your sketch file into groups of individual text files – one for each layer/page – that are much more suited for `git` to work with. 
+That's a good question. Instead of tracking the _actual_ sketch files (or _binaries_) in git, Kactus transforms your sketch file into groups of individual text files – one for each layer/page – that are much more suited for `git` to work with.
 
 ## Workflow
 
@@ -18,8 +18,8 @@ However, when working with multiple designers, the [git-flow](https://www.atlass
 3. Make your changes in Sketch
 4. Commit your changes
 5. Either:
-    - Push your changes to your git server for others to review/merge
-    - Merge your changes into another branch (master) yourself
+   - Push your changes to your git server for others to review/merge
+   - Merge your changes into another branch (master) yourself
 
 ## Committing Changes
 
@@ -31,9 +31,9 @@ When Kactus is running (with your repository open), it watches your sketch files
 
 ## Merging two parallel branches
 
-1. Checkout the branch you want to merge *into*
+1. Checkout the branch you want to merge _into_
 2. Select "Merge into Current Branch" from the "Branch" menu
-3. Select the branch that you want to merge *from*
+3. Select the branch that you want to merge _from_
 
 ![merge](https://user-images.githubusercontent.com/3254314/28254882-e28fb8d0-6a65-11e7-86a5-d766d4303959.gif)
 
@@ -51,8 +51,7 @@ If your sketch files are already tracked in a git repository, there are few thin
 
 1. Open your repo in Kactus to generate the JSON representation of your sketch files
 2. Commit the generated JSON directories
-2. Untrack sketch files. In most cases, this can be done with git by running: `git rm --cached *.sketch`
-3. Tell git to [ignore](/help/glossary/#ignore) sketch files by adding `*.sketch` to your repo's `.gitignore` file (create it if it doesn't exist)
+3. Untrack sketch files. In most cases, this can be done with git by running: `git rm --cached *.sketch`
+4. Tell git to [ignore](/help/glossary/#ignore) sketch files by adding `*.sketch` to your repo's `.gitignore` file (create it if it doesn't exist)
 
-> *Note:* When you create a new repository with Kactus, it is automatically configured to [ignore](/help/glossary/#ignore) sketch files.
-
+> _Note:_ When you create a new repository with Kactus, it is automatically configured to [ignore](/help/glossary/#ignore) sketch files.

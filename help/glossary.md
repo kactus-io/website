@@ -49,7 +49,6 @@ Finder hides files with names starting in a `.`, but you can easily edit this fi
   <figcaption>Managing ignored files in Kactus</figcaption>
 </figure>
 
-
 ## Issue
 
 Issues are suggested improvements, tasks or questions related to the repository. Issues can be created by anyone (for public repositories), and are moderated by repository collaborators. Each issue contains its own discussion forum, can be labeled and assigned to a user.
