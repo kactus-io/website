@@ -541,7 +541,7 @@
     document.getElementById("manage-org").style.display = "none";
     document.getElementById("loading").style.display = "block";
     var body = {
-      memberUsername: document.getElementById("github-username").value,
+      memberUsername: document.getElementById("github-username").value.trim().replace(/^@/g, ""),
       githubId: JSON.parse(localStorage.user).githubId,
       githubToken: localStorage.token,
       orgId: window.currentOrg.id
