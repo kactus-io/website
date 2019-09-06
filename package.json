@@ -4,7 +4,7 @@
     "serve": "serve .build"
   },
   "devDependencies": {
-    "serve": "^7.1.3",
+    "serve": "^11.1.0",
     "ugly-build": "^0.1.1"
   },
   "name": "kactus-www",

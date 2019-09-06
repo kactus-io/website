@@ -159,6 +159,7 @@
 </div>
 
 <script src="https://checkout.stripe.com/checkout.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
 
 <script>
   var query = location.search
@@ -489,16 +490,30 @@
           return res.json();
         })
         .then(function(res) {
+          if (!res.ok && res.paymentIntentSecret) {
+            var stripe = new Stripe("pk_live_qC4jgieXD6Qz8os77SPor33h");
+            return stripe
+              .handleCardPayment(result.paymentIntentSecret)
+              .then(function(stripeRes) {
+                if (stripeRes.error) {
+                  throw stripeRes.error;
+                }
+                return res.org;
+              });
+          }
+          return res.org;
+        })
+        .then(function(newOrg) {
           var user = JSON.parse(localStorage.user);
           if (window.currentOrg) {
             user.orgs = (user.orgs || []).map(function(org) {
-              if (org.id === res.org.id) {
-                return res.org;
+              if (org.id === newOrg.id) {
+                return newOrg;
               }
               return org;
             });
           } else {
-            user.orgs = (user.orgs || []).concat(res.org);
+            user.orgs = (user.orgs || []).concat(newOrg);
           }
           localStorage.user = JSON.stringify(user);
           render();
@@ -541,7 +556,10 @@
     document.getElementById("manage-org").style.display = "none";
     document.getElementById("loading").style.display = "block";
     var body = {
-      memberUsername: document.getElementById("github-username").value.trim().replace(/^@/g, ""),
+      memberUsername: document
+        .getElementById("github-username")
+        .value.trim()
+        .replace(/^@/g, ""),
       githubId: JSON.parse(localStorage.user).githubId,
       githubToken: localStorage.token,
       orgId: window.currentOrg.id
