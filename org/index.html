@@ -235,7 +235,7 @@
   function showError(err) {
     console.log(err);
     document.getElementById("error-content").innerHTML =
-      err.message || JSON.stringify(err);
+      err.message || String(err);
     document.getElementById("error-banner").style.display = "block";
   }
 
