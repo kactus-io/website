@@ -493,11 +493,15 @@
           if (!res.ok && res.paymentIntentSecret) {
             var stripe = new Stripe("pk_live_qC4jgieXD6Qz8os77SPor33h");
             return stripe
-              .handleCardPayment(result.paymentIntentSecret)
+              .handleCardPayment(res.paymentIntentSecret)
               .then(function(stripeRes) {
                 if (stripeRes.error) {
                   throw stripeRes.error;
                 }
+
+                res.org.validEnterprise = body.enterprise;
+                res.org.valid = !body.enterprise;
+
                 return res.org;
               });
           }
