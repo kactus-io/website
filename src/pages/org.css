@@ -1,0 +1,103 @@
+#onUpdateCardDetails {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.plan {
+  cursor: pointer;
+}
+
+.plan.selected {
+  border-color: rgba(62, 173, 63, 0.5);
+  box-shadow: 0 1px 10px rgba(62, 173, 63, 0.5);
+}
+
+.centered-section {
+  text-align: center;
+  padding-bottom: 100px;
+  max-width: 800px;
+  margin: auto;
+}
+
+#manage-org {
+  padding-bottom: 200px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.avatar {
+  margin: auto;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  overflow: hidden;
+  padding: 0;
+}
+
+.avatar:empty {
+  background: #83847f;
+}
+
+.avatar img {
+  width: 40px;
+  height: 40px;
+}
+
+table,
+tbody {
+  width: 100%;
+}
+
+table {
+  border-spacing: 0;
+}
+
+tr:hover,
+tr:hover td {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+td {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+#onAddMember {
+  padding: 0.3em 1.25em;
+  font-size: 14px;
+  float: right;
+}
+
+#github-username {
+  height: 24px;
+  margin-left: 20px;
+  padding: 0 10px;
+  width: calc(100% - 440px);
+}
+
+td .cta {
+  padding: 0.3em 1.25em;
+  font-size: 14px;
+  border: 1px solid rgb(155, 13, 13);
+  color: rgb(155, 13, 13);
+  transition: all 0.2s ease-in-out;
+}
+
+td .cta:hover {
+  background: rgb(155, 13, 13);
+  color: white;
+}
+
+.billing-duration-wrapper label {
+  display: inline-block;
+  width: 350px;
+  max-width: 90%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.billing-quote {
+  font-size: 0.9rem;
+  padding-left: 15px;
+}

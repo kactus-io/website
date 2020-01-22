@@ -1,0 +1,29 @@
+#error-banner,
+#success-banner {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgb(155, 13, 13);
+  color: white;
+  border-radius: 3px;
+  box-shadow: 0 1px 1px rgba(27, 31, 35, 0.1);
+  padding: 10px;
+  width: 250px;
+}
+
+#error-banner {
+  background: rgb(155, 13, 13);
+}
+
+#success-banner {
+  background: #3ead3f;
+}
+
+#close-success-banner,
+#close-error-banner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px;
+  cursor: pointer;
+}
