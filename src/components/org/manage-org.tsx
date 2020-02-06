@@ -186,7 +186,7 @@ export const ManageOrg = ({
   }, [memberUsername, user, org])
 
   const unsubscribe = React.useCallback(() => {
-    fetch(`${API_ROOT}/unsubscribe`, {
+    fetch(`${API_ROOT}/orgs/unsubscribe`, {
       body: JSON.stringify({
         githubId: user.githubId,
         orgId: org.id,
