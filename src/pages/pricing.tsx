@@ -61,7 +61,10 @@ const Pricing = () => (
               <strong>Unlimited private repositories</strong>
             </li>
             <li>
-              <strong>Support single sign-on and on-premises deployment</strong>
+              <strong>
+                Support single sign-on and on-premises deployment (via Github
+                Enterprise)
+              </strong>
             </li>
             <li>
               <strong>
