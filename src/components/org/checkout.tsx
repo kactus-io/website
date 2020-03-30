@@ -6,31 +6,42 @@ import { Org, User } from '../../types'
 const API_ROOT = process.env.GATSBY_API_ROOT
 const STRIPE_PUBLIC_KEY = process.env.GATSBY_STRIPE_PUBLIC_KEY
 
+export enum CHECKOUT_TARGET {
+  USER,
+  ORG,
+}
+
 export const Checkout = ({
   user,
   ctaLabel,
   panelLabel,
   org,
-  coupon,
   enterprise,
   duration,
   update,
   primary,
   setBanner,
   setUser,
+  checkoutTarget,
 }: {
   user: User
   ctaLabel: string
   panelLabel?: string
   org?: Org
-  coupon?: string
   enterprise: boolean
   duration: string
   update?: boolean
   primary?: boolean
   setBanner: (arg: { message: string; error?: boolean }) => void
   setUser: (arg: User) => void
+  checkoutTarget?: CHECKOUT_TARGET
 }) => {
+  const coupon =
+    typeof window !== 'undefined'
+      ? decodeURIComponent(
+          (window.location.search.split('coupon=')[1] || '').split('&')[0]
+        ) || undefined
+      : undefined
   return (
     <StripeCheckout
       stripeKey={STRIPE_PUBLIC_KEY}
@@ -57,11 +68,16 @@ export const Checkout = ({
         }
 
         if (update) {
-          fetch(`${API_ROOT}/orgs/update-card-details`, {
-            body: JSON.stringify(body),
-            mode: 'cors',
-            method: 'PUT',
-          })
+          fetch(
+            `${API_ROOT}/${
+              checkoutTarget === CHECKOUT_TARGET.USER ? 'user' : 'orgs'
+            }/update-card-details`,
+            {
+              body: JSON.stringify(body),
+              mode: 'cors',
+              method: 'PUT',
+            }
+          )
             .then(res => {
               if (!res.ok) {
                 return res.json().then(function(parsed) {
@@ -72,11 +88,16 @@ export const Checkout = ({
             .then(() => setBanner({ message: 'Card details updated!' }))
             .catch(err => setBanner({ message: err.message, error: true }))
         } else {
-          fetch(`${API_ROOT}/orgs/unlock`, {
-            body: JSON.stringify(body),
-            mode: 'cors',
-            method: 'POST',
-          })
+          fetch(
+            `${API_ROOT}/${
+              checkoutTarget === CHECKOUT_TARGET.USER ? 'user' : 'orgs'
+            }/unlock`,
+            {
+              body: JSON.stringify(body),
+              mode: 'cors',
+              method: 'POST',
+            }
+          )
             .then(res => {
               if (!res.ok) {
                 return res.json().then(parsed => {
@@ -104,17 +125,25 @@ export const Checkout = ({
               return res.org
             })
             .then(newOrg => {
-              setUser({
-                ...user,
-                validEnterprise: body.enterprise,
-                valid: !body.enterprise,
-                orgs: org
-                  ? (user.orgs || []).map(org =>
-                      org.id === newOrg.id ? newOrg : org
-                    )
-                  : (user.orgs || []).concat(newOrg),
-                currentOrg: newOrg,
-              })
+              if (checkoutTarget === CHECKOUT_TARGET.USER) {
+                setUser({
+                  ...user,
+                  validEnterprise: enterprise,
+                  valid: !enterprise,
+                })
+              } else {
+                setUser({
+                  ...user,
+                  validEnterprise: body.enterprise,
+                  valid: !body.enterprise,
+                  orgs: org
+                    ? (user.orgs || []).map(org =>
+                        org.id === newOrg.id ? newOrg : org
+                      )
+                    : (user.orgs || []).concat(newOrg),
+                  currentOrg: newOrg,
+                })
+              }
             })
             .catch(err => setBanner({ message: err.message, error: true }))
         }

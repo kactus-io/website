@@ -1,12 +1,12 @@
 import React from 'react'
 import { navigate } from 'gatsby'
-import StripeCheckout from 'react-stripe-checkout'
 
 import Layout from '../components/layout'
 import SEO from '../components/seo'
 import Header from '../components/header'
 import Loader from '../components/loader'
 import Banner from '../components/banner'
+import { Checkout, CHECKOUT_TARGET } from '../components/org/checkout'
 
 import useUser from '../hooks/useUser'
 
@@ -16,115 +16,6 @@ import './pricing.css'
 import './org.css'
 
 const API_ROOT = process.env.GATSBY_API_ROOT
-const STRIPE_PUBLIC_KEY = process.env.GATSBY_STRIPE_PUBLIC_KEY
-
-const Checkout = ({
-  user,
-  ctaLabel,
-  panelLabel,
-  coupon,
-  enterprise,
-  duration,
-  update,
-  primary,
-  setBanner,
-  setUser,
-}: {
-  user: User
-  ctaLabel: string
-  panelLabel?: string
-  coupon?: string
-  enterprise: boolean
-  duration: string
-  update?: boolean
-  primary?: boolean
-  setBanner: (arg: { message: string; error?: boolean }) => void
-  setUser: (arg: User) => void
-}) => {
-  return (
-    <StripeCheckout
-      stripeKey={STRIPE_PUBLIC_KEY}
-      locale="auto"
-      name="Kactus"
-      zipCode
-      panelLabel={panelLabel || ctaLabel || 'Subscribe'}
-      billingAddress
-      token={(token, args) => {
-        const body: { [key: string]: any } = {
-          token: token.id,
-          email: token.email,
-          githubId: user.githubId,
-          githubToken: user.token,
-          enterprise: enterprise,
-          duration: duration,
-          metadata: args,
-        }
-        if (coupon) {
-          body.coupon = coupon
-        }
-
-        if (update) {
-          fetch(`${API_ROOT}/user/update-card-details`, {
-            body: JSON.stringify(body),
-            mode: 'cors',
-            method: 'PUT',
-          })
-            .then(res => {
-              if (!res.ok) {
-                return res.json().then(function(parsed) {
-                  throw new Error(parsed.message)
-                })
-              }
-            })
-            .then(() => setBanner({ message: 'Card details updated!' }))
-            .catch(err => setBanner({ message: err.message, error: true }))
-        } else {
-          fetch(`${API_ROOT}/user/unlock`, {
-            body: JSON.stringify(body),
-            mode: 'cors',
-            method: 'POST',
-          })
-            .then(res => {
-              if (!res.ok) {
-                return res.json().then(parsed => {
-                  throw new Error(parsed.message)
-                })
-              }
-              return res.json()
-            })
-            .then(res => {
-              if (!res.ok && res.paymentIntentSecret) {
-                const stripe = Stripe(STRIPE_PUBLIC_KEY)
-                return stripe
-                  .handleCardPayment(res.paymentIntentSecret)
-                  .then(stripeRes => {
-                    if (stripeRes.error) {
-                      throw stripeRes.error
-                    }
-
-                    res.org.validEnterprise = body.enterprise
-                    res.org.valid = !body.enterprise
-
-                    return res.org
-                  })
-              }
-              return res.org
-            })
-            .then(() => {
-              setUser({
-                ...user,
-                validEnterprise: enterprise,
-                valid: !enterprise,
-              })
-            })
-            .catch(err => setBanner({ message: err.message, error: true }))
-        }
-      }}
-    >
-      <button className={primary ? 'cta primary' : 'cta'}>{ctaLabel}</button>
-    </StripeCheckout>
-  )
-}
 
 const Unlock = ({
   user,
@@ -241,6 +132,7 @@ const Unlock = ({
         duration={duration}
         user={user}
         ctaLabel={'Subscribe'}
+        checkoutTarget={CHECKOUT_TARGET.USER}
       />
     </div>
   )
@@ -291,6 +183,7 @@ const Index = ({ location }: { location: Location }) => {
                 update
                 duration="don't care"
                 enterprise={true}
+                checkoutTarget={CHECKOUT_TARGET.USER}
               />
 
               <div>
