@@ -185,14 +185,15 @@ export const ManageOrg = ({
       })
   }, [memberUsername, user, org])
 
-  const unsubscribe = React.useCallback(() => {
-    fetch(`${API_ROOT}/orgs/unsubscribe`, {
+  const redirectToStripeDashboard = React.useCallback(() => {
+    fetch(`${API_ROOT}/accessStripeDashboard`, {
       body: JSON.stringify({
         githubId: user.githubId,
+        token: user.token,
         orgId: org.id,
       }),
       mode: 'cors',
-      method: 'DELETE',
+      method: 'POST',
     })
       .then(res => {
         if (!res.ok) {
@@ -202,23 +203,8 @@ export const ManageOrg = ({
         }
         return res.json()
       })
-      .then(() => {
-        setUser({
-          ...user,
-          orgs: (user.orgs || []).map(x => {
-            if (org.id === x.id) {
-              x.valid = false
-              x.validEnterprise = false
-              return x
-            }
-            return x
-          }),
-          currentOrg: {
-            ...user.currentOrg,
-            valid: false,
-            validEnterprise: false,
-          },
-        })
+      .then(({ url }) => {
+        window.location.href = url
       })
       .catch(err => setBanner({ message: err.message, error: true }))
   }, [user, org])
@@ -251,7 +237,7 @@ export const ManageOrg = ({
             setBanner={setBanner}
             user={user}
             org={org}
-            onUnsubscribe={unsubscribe}
+            onRedirectToStripeDashboard={redirectToStripeDashboard}
           />
 
           <fieldset>

@@ -1,17 +1,4 @@
 {
-  "scripts": {
-    "build": "gatsby build",
-    "develop": "gatsby develop",
-    "format": "prettier --write src/**/*.{js,jsx,ts,tsx}",
-    "start": "npm run develop",
-    "serve": "gatsby serve"
-  },
-  "devDependencies": {
-    "@types/react-dom": "^16.9.5",
-    "@types/react-helmet": "^5.0.15",
-    "@types/stripe-v3": "^3.1.14",
-    "prettier": "^1.19.1"
-  },
   "name": "kactus-www",
   "description": "Kactus.io source",
   "version": "0.2.6",
@@ -51,6 +38,19 @@
     "react-helmet": "^5.2.1",
     "react-spring": "^8.0.27",
     "react-stripe-checkout": "^2.6.3"
+  },
+  "scripts": {
+    "build": "gatsby build",
+    "develop": "gatsby develop",
+    "format": "prettier --write src/**/*.{js,jsx,ts,tsx}",
+    "start": "npm run develop",
+    "serve": "gatsby serve"
+  },
+  "devDependencies": {
+    "@types/react-dom": "^16.9.5",
+    "@types/react-helmet": "^5.0.15",
+    "@types/stripe-v3": "^3.1.14",
+    "prettier": "^1.19.1"
   },
   "prettier": {
     "proseWrap": "never",

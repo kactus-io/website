@@ -1,8 +1,6 @@
 import React from 'react'
 import ReactDom from 'react-dom'
 
-import { Checkout } from './checkout'
-
 import { Org, User } from '../../types'
 
 import './settings.css'
@@ -23,13 +21,13 @@ export const Settings = ({
   org,
   setBanner,
   setUser,
-  onUnsubscribe,
+  onRedirectToStripeDashboard,
 }: {
   user: User
   org: Org
   setBanner: (arg: { message: string; error?: boolean }) => void
   setUser: (arg: User) => void
-  onUnsubscribe: () => void
+  onRedirectToStripeDashboard: () => void
 }) => {
   const buttonRef = React.useRef<HTMLButtonElement | null>(null)
   const [showingSettings, setShowingSettings] = React.useState(false)
@@ -58,18 +56,8 @@ export const Settings = ({
                 : 0,
             }}
           >
-            <Checkout
-              setUser={setUser}
-              setBanner={setBanner}
-              user={user}
-              org={org}
-              ctaLabel="Update Card details"
-              update
-              duration="don't care"
-              enterprise={true}
-            />
-            <button className="cta error" onClick={onUnsubscribe}>
-              Cancel Subscription
+            <button className="cta" onClick={onRedirectToStripeDashboard}>
+              Manage Subscription and Billing Details
             </button>
           </div>
         </Modal>

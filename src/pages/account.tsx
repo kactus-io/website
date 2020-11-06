@@ -175,29 +175,19 @@ const Index = ({ location }: { location: Location }) => {
                 You are currently subscribed to the{' '}
                 {user.validEnterprise ? 'Enterprise' : 'Premium'} plan.
               </h2>
-              <Checkout
-                setUser={setUser}
-                setBanner={setBanner}
-                user={user}
-                ctaLabel="Update Card details"
-                update
-                duration="don't care"
-                enterprise={true}
-                checkoutTarget={CHECKOUT_TARGET.USER}
-              />
 
               <div>
                 <br />
                 <button
                   className="cta error"
                   onClick={() =>
-                    fetch(`${API_ROOT}/unsubscribe`, {
+                    fetch(`${API_ROOT}/accessStripeDashboard`, {
                       body: JSON.stringify({
                         githubId: user.githubId,
                         token: user.token,
                       }),
                       mode: 'cors',
-                      method: 'DELETE',
+                      method: 'POST',
                     })
                       .then(res => {
                         if (!res.ok) {
@@ -207,19 +197,15 @@ const Index = ({ location }: { location: Location }) => {
                         }
                         return res.json()
                       })
-                      .then(() => {
-                        setUser({
-                          ...user,
-                          validEnterprise: false,
-                          valid: false,
-                        })
+                      .then(({ url }) => {
+                        window.location.href = url
                       })
                       .catch(err =>
                         setBanner({ message: err.message, error: true })
                       )
                   }
                 >
-                  Unsubscribe
+                  Manage Subscription and Billing Details
                 </button>
               </div>
             </div>
