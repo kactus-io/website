@@ -189,7 +189,7 @@ export const ManageOrg = ({
     fetch(`${API_ROOT}/accessStripeDashboard`, {
       body: JSON.stringify({
         githubId: user.githubId,
-        token: user.token,
+        githubToken: user.token,
         orgId: org.id,
       }),
       mode: 'cors',

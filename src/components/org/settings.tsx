@@ -57,7 +57,13 @@ export const Settings = ({
             }}
           >
             <button className="cta" onClick={onRedirectToStripeDashboard}>
-              Manage Subscription and Billing Details
+              Manage Subscription
+            </button>
+            <button className="cta" onClick={onRedirectToStripeDashboard}>
+              Update Billing Details
+            </button>
+            <button className="cta" onClick={onRedirectToStripeDashboard}>
+              Billing History
             </button>
           </div>
         </Modal>

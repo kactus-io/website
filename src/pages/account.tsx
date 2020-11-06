@@ -151,6 +151,28 @@ const Index = ({ location }: { location: Location }) => {
     }
   }, [loading])
 
+  const goToStripe = () =>
+    fetch(`${API_ROOT}/accessStripeDashboard`, {
+      body: JSON.stringify({
+        githubId: user.githubId,
+        githubToken: user.token,
+      }),
+      mode: 'cors',
+      method: 'POST',
+    })
+      .then(res => {
+        if (!res.ok) {
+          return res.json().then(parsed => {
+            throw new Error(parsed.message)
+          })
+        }
+        return res.json()
+      })
+      .then(({ url }) => {
+        window.location.href = url
+      })
+      .catch(err => setBanner({ message: err.message, error: true }))
+
   return (
     <Layout>
       <SEO />
@@ -178,34 +200,16 @@ const Index = ({ location }: { location: Location }) => {
 
               <div>
                 <br />
-                <button
-                  className="cta error"
-                  onClick={() =>
-                    fetch(`${API_ROOT}/accessStripeDashboard`, {
-                      body: JSON.stringify({
-                        githubId: user.githubId,
-                        token: user.token,
-                      }),
-                      mode: 'cors',
-                      method: 'POST',
-                    })
-                      .then(res => {
-                        if (!res.ok) {
-                          return res.json().then(parsed => {
-                            throw new Error(parsed.message)
-                          })
-                        }
-                        return res.json()
-                      })
-                      .then(({ url }) => {
-                        window.location.href = url
-                      })
-                      .catch(err =>
-                        setBanner({ message: err.message, error: true })
-                      )
-                  }
-                >
-                  Manage Subscription and Billing Details
+                <button className="cta" onClick={goToStripe}>
+                  Manage Subscription
+                </button>
+                <br />
+                <button className="cta" onClick={goToStripe}>
+                  Update Billing Details
+                </button>
+                <br />
+                <button className="cta" onClick={goToStripe}>
+                  Billing History
                 </button>
               </div>
             </div>
