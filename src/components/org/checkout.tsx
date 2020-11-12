@@ -18,7 +18,6 @@ export const Checkout = ({
   org,
   enterprise,
   duration,
-  update,
   primary,
   setBanner,
   setUser,
@@ -30,7 +29,6 @@ export const Checkout = ({
   org?: Org
   enterprise: boolean
   duration: string
-  update?: boolean
   primary?: boolean
   setBanner: (arg: { message: string; error?: boolean }) => void
   setUser: (arg: User) => void
@@ -68,75 +66,55 @@ export const Checkout = ({
         }
 
         try {
-          if (update) {
-            const res = await fetch(
-              `${API_ROOT}/${
-                checkoutTarget === CHECKOUT_TARGET.USER ? 'user' : 'orgs'
-              }/update-card-details`,
-              {
-                body: JSON.stringify(body),
-                mode: 'cors',
-                method: 'PUT',
-              }
+          const res = await fetch(
+            `${API_ROOT}/${
+              checkoutTarget === CHECKOUT_TARGET.USER ? '' : 'orgs/'
+            }unlock`,
+            {
+              body: JSON.stringify(body),
+              mode: 'cors',
+              method: 'POST',
+            }
+          )
+
+          const data = await res.json()
+          if (!res.ok) {
+            throw new Error(data.message)
+          }
+
+          let newOrg = data.org
+          if (!data.ok && data.paymentIntentSecret) {
+            const stripe = Stripe(STRIPE_PUBLIC_KEY)
+            const stripeRes = await stripe.handleCardPayment(
+              data.paymentIntentSecret
             )
 
-            if (!res.ok) {
-              const parsed = await res.json()
-              throw new Error(parsed.message)
+            if (stripeRes.error) {
+              throw stripeRes.error
             }
 
-            setBanner({ message: 'Card details updated!' })
+            newOrg.validEnterprise = body.enterprise
+            newOrg.valid = !body.enterprise
+          }
+
+          if (checkoutTarget === CHECKOUT_TARGET.USER) {
+            setUser({
+              ...user,
+              validEnterprise: enterprise,
+              valid: !enterprise,
+            })
           } else {
-            const res = await fetch(
-              `${API_ROOT}/${
-                checkoutTarget === CHECKOUT_TARGET.USER ? 'user' : 'orgs'
-              }/unlock`,
-              {
-                body: JSON.stringify(body),
-                mode: 'cors',
-                method: 'POST',
-              }
-            )
-
-            const data = await res.json()
-            if (!res.ok) {
-              throw new Error(data.message)
-            }
-
-            let newOrg = data.org
-            if (!data.ok && data.paymentIntentSecret) {
-              const stripe = Stripe(STRIPE_PUBLIC_KEY)
-              const stripeRes = await stripe.handleCardPayment(
-                data.paymentIntentSecret
-              )
-
-              if (stripeRes.error) {
-                throw stripeRes.error
-              }
-
-              newOrg.validEnterprise = body.enterprise
-              newOrg.valid = !body.enterprise
-            }
-
-            if (checkoutTarget === CHECKOUT_TARGET.USER) {
-              setUser({
-                ...user,
-                validEnterprise: enterprise,
-                valid: !enterprise,
-              })
-            } else {
-              setUser({
-                ...user,
-                validEnterprise: body.enterprise,
-                valid: !body.enterprise,
-                orgs: org
-                  ? (user.orgs || []).map(org =>
-                      org.id === newOrg.id ? newOrg : org
-                    )
-                  : (user.orgs || []).concat(newOrg),
-                currentOrg: newOrg,
-              })
-            }
+            setUser({
+              ...user,
+              validEnterprise: body.enterprise,
+              valid: !body.enterprise,
+              orgs: org
+                ? (user.orgs || []).map(org =>
+                    org.id === newOrg.id ? newOrg : org
+                  )
+                : (user.orgs || []).concat(newOrg),
+              currentOrg: newOrg,
+            })
           }
         } catch (err) {
           setBanner({ message: err.message, error: true })
