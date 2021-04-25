@@ -232,13 +232,16 @@ export const ManageOrg = ({
         </div>
       ) : (
         <div>
-          <Settings
-            setUser={setUser}
-            setBanner={setBanner}
-            user={user}
-            org={org}
-            onRedirectToStripeDashboard={redirectToStripeDashboard}
-          />
+          {/* don't show settings for prepaid orgs */}
+          {typeof org.prepaidFor !== 'undefined' ? null : (
+            <Settings
+              setUser={setUser}
+              setBanner={setBanner}
+              user={user}
+              org={org}
+              onRedirectToStripeDashboard={redirectToStripeDashboard}
+            />
+          )}
 
           <fieldset>
             <label htmlFor="github-username">

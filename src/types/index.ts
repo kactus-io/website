@@ -5,6 +5,7 @@ export type Org = {
   valid: boolean
   validEnterprise: boolean
   stripeId?: string
+  prepaidFor?: number
 }
 
 export type User = {
