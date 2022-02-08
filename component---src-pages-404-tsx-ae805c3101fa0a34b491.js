@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[4],{"i6+/":function(e,a,t){"use strict";t.r(a);t("q1tI");var n=t("Wbzz"),c=t("9Dj+"),r=t("H8eV"),l=t("BNza"),s=t("qKvR");a.default=function(){return Object(s.a)(c.a,null,Object(s.a)(r.a,null),Object(s.a)(l.a,null),Object(s.a)("div",{className:"container text-center hero"},Object(s.a)("h1",null,"404 - That's desert in here"),Object(s.a)("br",null),Object(s.a)(n.Link,{className:"cta primary",to:"/"},"Go back somewhere safe")))}}}]);
+//# sourceMappingURL=component---src-pages-404-tsx-ae805c3101fa0a34b491.js.map

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+<url> <loc>https://kactus.io/account/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://kactus.io/contact/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://kactus.io/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://kactus.io/login/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://kactus.io/org/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://kactus.io/pricing/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://kactus.io/privacy-statement/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://kactus.io/release-notes/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://kactus.io/help/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://kactus.io/help/glossary/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://kactus.io/help/how-to/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://kactus.io/help/kactus-dot-json/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+</urlset>
