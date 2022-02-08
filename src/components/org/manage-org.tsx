@@ -233,7 +233,7 @@ export const ManageOrg = ({
       ) : (
         <div>
           {/* don't show settings for prepaid orgs */}
-          {typeof org.prepaidFor !== 'undefined' ? null : (
+          {typeof org.prepaidFor !== 'undefined' && org.prepaidFor !== 0 ? null : (
             <Settings
               setUser={setUser}
               setBanner={setBanner}
